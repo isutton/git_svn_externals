@@ -123,7 +123,12 @@ sub makeSymlinkToExternal {
     $path_to_repo_root =~ s/\n$//;
     my $externals_relative_dir = $path_to_repo_root . $git_externals_dir;
 
-    symlink(join("/", $externals_relative_dir, $ext_path), $ext_path);
+    my @ext_path = split(m!/!, $ext_path);
+    my $cdup = join('/', '..' x $#ext_path);
+
+    my $symlink_dest = join("/", $cdup, $externals_relative_dir, $ext_path);
+
+    symlink($symlink_dest, $ext_path);
 }
 
 sub getExternal {
